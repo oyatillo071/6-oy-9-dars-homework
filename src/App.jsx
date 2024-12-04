@@ -1,16 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+
+import "./App.css";
+import { Link, NavLink, Route, Routes } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Product from "./pages/Product";
+import Products from "./pages/Products";
+import ErrorPage from "./pages/ErrorPage";
+import MainLayout from "./layouts/MainLayout";
+import About from "./pages/About";
+import Cart from "./pages/Cart";
+import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <h1>Testing text</h1>
+      <Routes>
+        <Route
+          index
+          element={
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/products/:id"
+          element={
+            <MainLayout>
+              <Product />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <MainLayout>
+              <Cart />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <MainLayout>
+              <Products />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <MainLayout>
+              <ErrorPage />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <MainLayout>
+              <About />
+            </MainLayout>
+          }
+        />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

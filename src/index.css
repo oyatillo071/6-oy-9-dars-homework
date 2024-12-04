@@ -1,3 +1,17 @@
+@import "daisyui/dist/full.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    background: white;
+  }
+}
+
+@layer components {
+  body {
+    background: white;
+  }
+}
