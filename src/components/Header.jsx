@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
-    <div className="  bg-[#f0f6ff] py-2">
+    <div className="  bg-[#f0f6ff] py-2 mb-20">
       <header className=" font-sans flex items-center justify-between   container mx-auto">
         <button className=" font-sans bg-[#057aff] px-4  rounded-md  text-3xl text-[#dbe1ff] ">
           C

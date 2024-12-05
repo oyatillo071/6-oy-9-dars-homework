@@ -5,16 +5,22 @@ header {
   background: #000 !important;
   color: white !important;
 }
-
-:root {
-  color-scheme:  dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --totl-primary-background: white;
-    color-scheme: light dark;
-  }
-}
-body.dark{
+body.dark {
   background-color: white;
+}
+
+input[type="radio"] {
+  display: none;
+}
+label + checked {
+  display: inline-block;
+  border: 1 px solid black;
+  padding: 2px;
+  border-radius: 50%;
+}
+label {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
 }

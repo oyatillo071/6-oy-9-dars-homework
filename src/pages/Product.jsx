@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { NavLink,Link, useParams } from "react-router-dom";
+import { NavLink, Link, useParams } from "react-router-dom";
 
 function Product() {
   const [product, setProduct] = useState([]);
@@ -86,7 +86,7 @@ function Product() {
                     htmlFor={`color-${index}`}
                     className="flex items-center">
                     <div
-                      className="rounded-full w-7 h-7 cursor-pointer border-2 border-gray-300"
+                      className="rounded-[50%] w-7 h-7 cursor-pointer border-2 border-gray-300"
                       style={{ backgroundColor: value }}></div>
                     <input
                       type="radio"
@@ -119,7 +119,7 @@ function Product() {
           </div>
 
           <div className="mt-10">
-            <button className="btn bg-[#463aa1] border-none text-[#dbd4ed] btn-md ">
+            <button className="btn bg-[#463aa1] border-none text-[#dbd4ed] btn-md hover:bg-blue-600 ">
               Add to bag
             </button>
           </div>

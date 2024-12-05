@@ -5,42 +5,220 @@ import { useNavigate } from "react-router-dom";
 function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [formData, setFormData] = useState({
+    search: "",
+    category: "all",
+    company: "all",
+    order: "a-z",
+    price: 65000,
+    shipping: false,
+  });
+
   const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   useEffect(() => {
     axios
-      .get("https://strapi-store-server.onrender.com/api/products")
+      .get(
+        `https://strapi-store-server.onrender.com/api/products?search=${formData.search}&category=${formData.category}&company=${formData.company}&order=${formData.order}&price=${formData.price}&page=${page}`
+      )
       .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
+        if (response.status === 200) {
           setProducts(response.data.data);
-          setLoading(false);
         }
+        setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setLoading(false);
       });
-  }, []);
+  }, [formData, page]);
 
-  function handleRedirect(id) {
-    navigate(`/products/${id}`);
-  }
+  const formatPrice = (price) => `$${(price / 100).toFixed(2)}`;
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="text-center py-10">Loading...</div>;
   }
 
-  if (products.length === 0) {
-    return <div>No products found.</div>;
+  if (!loading && products.length === 0) {
+    return <div className="text-center py-10">No products found.</div>;
   }
+
   return (
-    <div className="w-full flex flex-wrap items-center mt-5 justify-between gap-5">
-      {products.length > 0 &&
-        products.map((product, index) => {
-          let price = product.attributes.price.toString();
+    <div className="container px-10 mx-auto">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        onChange={(e) => {
+          e.preventDefault();
+        }}
+        className="bg-[#f0f6ff] rounded-md px-8 py-4 grid gap-x-4 mb-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center">
+        <div className="form-control flex flex-col items-start">
+          <label htmlFor="search" className="label text-nowrap">
+            <span className="label-text capitalize">Search Product</span>
+          </label>
+          <input
+            type="text"
+            name="search"
+            id="search"
+            className="input input-bordered input-sm"
+            value={formData.search}
+            onChange={(e) => {
+              handleInputChange(e);
+              e.preventDefault();
+            }}
+          />
+        </div>
 
-          let formattedPrice =
+        <div className="form-control">
+          <label htmlFor="category" className="label text-nowrap">
+            <span className="label-text capitalize">Select Category</span>
+          </label>
+          <select
+            name="category"
+            id="category"
+            className="select select-bordered select-sm"
+            value={formData.category}
+            onChange={(e) => {
+              handleInputChange(e);
+              e.preventDefault();
+            }}>
+            <option value="all">all</option>
+            <option value="Tables">Tables</option>
+            <option value="Chairs">Chairs</option>
+            <option value="Kids">Kids</option>
+            <option value="Sofas">Sofas</option>
+            <option value="Beds">Beds</option>
+          </select>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="company" className="label text-nowrap">
+            <span className="label-text capitalize">Select Company</span>
+          </label>
+          <select
+            name="company"
+            id="company"
+            className="select select-bordered select-sm"
+            value={formData.company}
+            onChange={(e) => {
+              handleInputChange(e);
+              e.preventDefault();
+            }}>
+            <option value="all">all</option>
+            <option value="Modenza">Modenza</option>
+            <option value="Luxora">Luxora</option>
+            <option value="Artifex">Artifex</option>
+            <option value="Comfora">Comfora</option>
+            <option value="Homestead">Homestead</option>
+          </select>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="order" className="label text-nowrap">
+            <span className="label-text capitalize">Sort By</span>
+          </label>
+          <select
+            name="order"
+            id="order"
+            className="select select-bordered select-sm"
+            value={formData.order}
+            onChange={(e) => {
+              handleInputChange(e);
+              e.preventDefault();
+            }}>
+            <option value="a-z">a-z</option>
+            <option value="z-a">z-a</option>
+            <option value="high">High</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="price" className="label text-nowrap">
+            <span className="label-text capitalize">Price Range</span>
+            <span>{formatPrice(formData.price)}</span>
+          </label>
+          <input
+            type="range"
+            name="price"
+            id="price"
+            min="0"
+            max="100000"
+            step="1000"
+            className="range range-primary range-sm"
+            value={formData.price}
+            onChange={(e) => {
+              handleInputChange(e);
+              e.preventDefault();
+            }}
+          />
+          <div className="w-full flex justify-between text-xs px-2 mt-2">
+            <span>$0.00</span>
+            <span>Max: $1,000.00</span>
+          </div>
+        </div>
+
+        <div className="form-control">
+          <label
+            htmlFor="shipping"
+            className="label cursor-pointer text-nowrap">
+            <span className="label-text capitalize">Free Shipping</span>
+          </label>
+          <input
+            type="checkbox"
+            name="shipping"
+            id="shipping"
+            className="checkbox checkbox-primary checkbox-sm"
+            checked={formData.shipping}
+            onChange={(e) => {
+              handleInputChange(e);
+              e.preventDefault();
+            }}
+          />
+        </div>
+
+        <div className="flex gap-4">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+            type="submit"
+            className="btn btn-primary btn-sm px-20">
+            Search
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setFormData({
+                search: "",
+                category: "all",
+                company: "all",
+                order: "a-z",
+                price: 65000,
+                shipping: false,
+              })
+            }
+            className="btn btn-accent btn-sm px-20">
+            Reset
+          </button>
+        </div>
+      </form>
+
+      <div className="w-full flex flex-wrap items-center justify-between gap-5 mt-5">
+        {products.map((product) => {
+          const price = product.attributes.price.toString();
+          const formattedPrice =
             price.slice(0, price.length - 2) +
             "." +
             price.slice(price.length - 2);
@@ -49,13 +227,11 @@ function Products() {
             <div
               key={product.id}
               className="flex w-[25%] h-[350px] p-2 rounded-xl flex-col shadow-md items-center gap-2"
-              onClick={() => {
-                handleRedirect(product.id);
-              }}>
+              onClick={() => navigate(`/products/${product.id}`)}>
               <img
                 src={product.attributes.image}
                 className="w-full h-[250px] rounded-lg object-cover"
-                alt="img"
+                alt={product.attributes.title}
               />
               <h3 className="font-semibold text-black capitalize">
                 {product.attributes.title}
@@ -64,6 +240,44 @@ function Products() {
             </div>
           );
         })}
+      </div>
+
+      <div className="flex justify-center items-center gap-4 mt-8 mb-12">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          className="btn btn-sm btn-outline">
+          Previous
+        </button>
+        <span
+          className="hover:bg-gray-700 cursor-pointer bg-slate-600 rounded-lg py-1 px-3 "
+          onClick={(e) => {
+            e.preventDefault();
+            setPage(1);
+          }}>
+          1
+        </span>
+        <span
+          className="hover:bg-gray-700 cursor-pointer bg-slate-600 rounded-lg py-1 px-3 "
+          onClick={(e) => {
+            e.preventDefault();
+            setPage(2);
+          }}>
+          2
+        </span>
+        <span
+          className="hover:bg-gray-700 cursor-pointer bg-slate-600 rounded-lg py-1 px-3 "
+          onClick={(e) => {
+            e.preventDefault();
+            setPage(3);
+          }}>
+          3
+        </span>
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, 3))}
+          className="btn btn-sm btn-outline">
+          Next
+        </button>
+      </div>
     </div>
   );
 }

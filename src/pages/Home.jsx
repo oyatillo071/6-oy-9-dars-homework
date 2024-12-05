@@ -34,7 +34,7 @@ function Home() {
 
   return (
     <>
-      <div className="flex h-full  container mx-auto mt-10 gap-7 pb-72 justify-between">
+      <div className="flex h-full  container mx-auto  gap-7 justify-between">
         <div className="w-[500px]">
           <h1 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-6xl">
             We are changing the way people shop
@@ -65,14 +65,14 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto py-5 mb-8">
-        <div className="border-b border-base-300 pb-5 mt-20 ">
+      <div className="container mx-auto mt-16 py-5 mb-8">
+        <div className="border-b border-base-300 pb-5  ">
           <h2 className="text-3xl font-medium tracking-wider capitalize">
             featured products
           </h2>
         </div>
 
-        <div className="w-full flex flex-wrap items-center mt-5 justify-between gap-5">
+        <div className="w-full flex flex-wrap items-center mt-16 justify-between gap-5">
           {products.length > 0 &&
             products.map((product, index) => {
               let price = product.attributes.price.toString();
@@ -85,7 +85,7 @@ function Home() {
               return (
                 <div
                   key={index}
-                  className="flex w-[25%] h-[350px] p-2 rounded-xl flex-col shadow-md items-center gap-2"
+                  className="flex w-[30%] h-[350px] p-2 rounded-xl flex-col shadow-md items-center gap-2"
                   onClick={() => {
                     handleRedirect(product.id);
                   }}>
