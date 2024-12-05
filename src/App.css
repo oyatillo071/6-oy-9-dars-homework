@@ -15,7 +15,7 @@ input[type="radio"] {
 label + checked {
   display: inline-block;
   border: 1 px solid black;
-  padding: 2px;
+  padding: 3px;
   border-radius: 50%;
 }
 label {
