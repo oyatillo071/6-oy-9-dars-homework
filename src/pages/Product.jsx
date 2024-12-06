@@ -5,6 +5,33 @@ import { NavLink, Link, useParams } from "react-router-dom";
 function Product() {
   const [product, setProduct] = useState([]);
   const { id } = useParams();
+  const [choiseColor, setChoiseColor] = useState(null);
+  const [choiseCount, setChoiseCount] = useState(1);
+  const [productId, setProductId] = useState(0);
+
+  function localSave(data, choiseColor, choiseCount) {
+    let copied = localStorage.getItem("productsData")
+      ? JSON.parse(localStorage.getItem("productsData"))
+      : [];
+
+    copied.push({
+      data: {
+        id: data.id,
+        title: data.attributes.title,
+        price: data.attributes.price,
+        company: data.attributes.company,
+        image: data.attributes.image,
+        shipping: data.attributes.shipping,
+      },
+      choiseColor,
+      choiseCount,
+    });
+
+    localStorage.setItem("productsData", JSON.stringify(copied));
+
+    console.log(JSON.parse(localStorage.getItem("productsData")));
+  }
+
   useEffect(() => {
     axios
       .get(`https://strapi-store-server.onrender.com/api/products/${id}`)
@@ -27,7 +54,7 @@ function Product() {
     );
   };
   if (!product || !product.attributes) {
-    return <div>Loading...</div>;
+    return <span className="loading loading-spinner loading-lg"></span>;
   }
 
   return (
@@ -80,13 +107,19 @@ function Product() {
                 e.preventDefault();
               }}>
               {product.attributes.colors.map((value, index) => {
+                const isSelected = choiseColor === value;
                 return (
                   <label
+                    onClick={() => {
+                      setChoiseColor(value);
+                    }}
                     key={index}
                     htmlFor={`color-${index}`}
                     className="flex items-center">
                     <div
-                      className="rounded-[50%] w-7 h-7 cursor-pointer border-2 border-gray-300"
+                      className={`rounded-[50%] w-7 h-7 cursor-pointer border-2 ${
+                        isSelected ? "border-black" : "border-gray-300"
+                      }`}
                       style={{ backgroundColor: value }}></div>
                     <input
                       type="radio"
@@ -108,6 +141,9 @@ function Product() {
               </h4>
             </label>
             <select
+              onChange={(e) => {
+                setChoiseCount(e.target.value);
+              }}
               className="select select-secondary select-bordered select-md bg-white border-black outline-none focus:border-black focus:outline-none"
               id="amount">
               {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
@@ -119,7 +155,21 @@ function Product() {
           </div>
 
           <div className="mt-10">
-            <button className="btn bg-[#463aa1] border-none text-[#dbd4ed] btn-md hover:bg-blue-600 ">
+            <button
+              onClick={(e) => {
+                if (!choiseColor || !choiseCount) {
+                  alert(
+                    "Please select a color and amount before adding to bag."
+                  );
+                  return;
+                }
+
+                // alert(choiseColor);
+                // alert(choiseCount);
+                // alert(productId);
+                localSave(product, choiseColor, choiseCount);
+              }}
+              className="btn bg-[#463aa1] border-none text-[#dbd4ed] btn-md hover:bg-blue-600 ">
               Add to bag
             </button>
           </div>

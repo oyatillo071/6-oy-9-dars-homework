@@ -44,11 +44,11 @@ function Home() {
             repellat explicabo enim soluta temporibus asperiores aut obcaecati
             perferendis porro nobis.
           </p>
-          <NavLink
+          <Link
             to="./products"
             className="bg-blue-600 px-4 py-3 text-[#dbe1ff]  rounded-md">
             OUR PRODUCTS
-          </NavLink>
+          </Link>
         </div>
         <div className="carousel carousel-center bg-neutral rounded-box  w-[600px] h-[500px]   space-x-4 p-4">
           <div className="carousel-item">

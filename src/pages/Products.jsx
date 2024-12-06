@@ -6,6 +6,8 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState(0);
+
   const [formData, setFormData] = useState({
     search: "",
     category: "all",
@@ -34,6 +36,7 @@ function Products() {
       .then((response) => {
         if (response.status === 200) {
           setProducts(response.data.data);
+          console.log(response.data);
         }
         setLoading(false);
       })
@@ -41,7 +44,7 @@ function Products() {
         console.error(error);
         setLoading(false);
       });
-  }, [formData, page]);
+  }, [search, page]);
 
   const formatPrice = (price) => `$${(price / 100).toFixed(2)}`;
 
@@ -192,6 +195,7 @@ function Products() {
           <button
             onClick={(e) => {
               e.preventDefault();
+              setSearch((prev) => prev + 1);
             }}
             type="submit"
             className="btn btn-primary btn-sm px-20">
@@ -242,36 +246,38 @@ function Products() {
         })}
       </div>
 
-      <div className="flex justify-center items-center gap-4 mt-8 mb-12">
+      <div className="flex justify-center items-center gap-4  mt-8 mb-12">
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           className="btn btn-sm btn-outline">
           Previous
         </button>
-        <span
-          className="hover:bg-gray-700 cursor-pointer bg-slate-600 rounded-lg py-1 px-3 "
-          onClick={(e) => {
-            e.preventDefault();
-            setPage(1);
-          }}>
-          1
-        </span>
-        <span
-          className="hover:bg-gray-700 cursor-pointer bg-slate-600 rounded-lg py-1 px-3 "
-          onClick={(e) => {
-            e.preventDefault();
-            setPage(2);
-          }}>
-          2
-        </span>
-        <span
-          className="hover:bg-gray-700 cursor-pointer bg-slate-600 rounded-lg py-1 px-3 "
-          onClick={(e) => {
-            e.preventDefault();
-            setPage(3);
-          }}>
-          3
-        </span>
+        <div className="flex items-center border bg-slate-500 overflow-hidden rounded-lg">
+          <span
+            className="hover:bg-gray-700 cursor-pointer   py-1 px-3 "
+            onClick={(e) => {
+              e.preventDefault();
+              setPage(1);
+            }}>
+            1
+          </span>
+          <span
+            className="hover:bg-gray-700 cursor-pointer   py-1 px-3 "
+            onClick={(e) => {
+              e.preventDefault();
+              setPage(2);
+            }}>
+            2
+          </span>
+          <span
+            className="hover:bg-gray-700 cursor-pointer   py-1 px-3 "
+            onClick={(e) => {
+              e.preventDefault();
+              setPage(3);
+            }}>
+            3
+          </span>
+        </div>
         <button
           onClick={() => setPage((prev) => Math.min(prev + 1, 3))}
           className="btn btn-sm btn-outline">
