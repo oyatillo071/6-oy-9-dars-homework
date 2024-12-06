@@ -17,26 +17,26 @@ function Cart() {
     setCopied(productsData);
     userLogged = localStorage.getItem("userLogged");
   }, []);
-
+  const formatPrice = (price) => {
+    const priceStr = price.toString();
+    return parseFloat(
+      priceStr.slice(0, priceStr.length - 2) +
+        "." +
+        priceStr.slice(priceStr.length - 2)
+    );
+  };
   useEffect(() => {
-    const subtotal = copied.reduce(
+    let subtotal = copied.reduce(
       (sum, item) => sum + item.data.price * item.choiseCount,
       0
     );
-    const shipping = 5.0;
-    const tax = (subtotal * 10) / 100;
-    const total = subtotal + shipping + tax;
+    subtotal = formatPrice(subtotal);
+    let shipping = 5;
+    let tax = subtotal * 0.1;
+    let total = (subtotal + shipping + tax).toFixed(2);
+    tax = tax.toFixed(2);
     setTotals({ subtotal, shipping, tax, total });
   }, [copied]);
-
-  const formatPrice = (price) => {
-    const priceStr = price.toString();
-    return (
-      priceStr.slice(0, priceStr.length - 2) +
-      "." +
-      priceStr.slice(priceStr.length - 2)
-    );
-  };
 
   if (copied.length === 0) {
     return <div>No items in the cart</div>;
@@ -128,25 +128,19 @@ function Cart() {
             <div className="card-body">
               <p className="flex justify-between text-xs border-b border-base-300 pb-2">
                 <span>Subtotal</span>
-                <span className="font-medium">
-                  ${formatPrice(totals.subtotal)}
-                </span>
+                <span className="font-medium">${totals.subtotal}</span>
               </p>
               <p className="flex justify-between text-xs border-b border-base-300 pb-2">
                 <span>Shipping</span>
-                <span className="font-medium">
-                  ${totals.shipping.toFixed(2)}
-                </span>
+                <span className="font-medium">${totals.shipping}</span>
               </p>
               <p className="flex justify-between text-xs border-b border-base-300 pb-2">
                 <span>Tax</span>
-                <span className="font-medium">${formatPrice(totals.tax)}</span>
+                <span className="font-medium">${totals.tax}</span>
               </p>
               <p className="flex justify-between text-sm mt-4 pb-2">
                 <span>Order Total</span>
-                <span className="font-medium">
-                  ${formatPrice(totals.total)}
-                </span>
+                <span className="font-medium">${totals.total}</span>
               </p>
             </div>
           </div>
