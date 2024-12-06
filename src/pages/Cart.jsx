@@ -31,10 +31,11 @@ function Cart() {
       0
     );
     subtotal = formatPrice(subtotal);
-    let shipping = 5;
+    let shipping = subtotal * 0.5;
     let tax = subtotal * 0.1;
     let total = (subtotal + shipping + tax).toFixed(2);
     tax = tax.toFixed(2);
+    shipping = shipping.toFixed(2);
     setTotals({ subtotal, shipping, tax, total });
   }, [copied]);
 
