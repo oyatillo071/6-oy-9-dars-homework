@@ -31,7 +31,7 @@ function Cart() {
       0
     );
     subtotal = formatPrice(subtotal);
-    let shipping = subtotal * 0.5;
+    let shipping = subtotal * 0.05;
     let tax = subtotal * 0.1;
     let total = (subtotal + shipping + tax).toFixed(2);
     tax = tax.toFixed(2);
