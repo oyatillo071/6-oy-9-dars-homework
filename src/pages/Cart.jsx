@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
 
 function Cart() {
   const [copied, setCopied] = useState([]);
@@ -8,12 +9,13 @@ function Cart() {
     tax: 0,
     total: 0,
   });
-
+  let userLogged = localStorage.getItem("userLogged");
   useEffect(() => {
     const productsData = localStorage.getItem("productsData")
       ? JSON.parse(localStorage.getItem("productsData"))
       : [];
     setCopied(productsData);
+    userLogged = localStorage.getItem("userLogged");
   }, []);
 
   useEffect(() => {
@@ -148,9 +150,17 @@ function Cart() {
               </p>
             </div>
           </div>
-          <a className="btn btn-primary btn-block mt-8" href="/login">
-            Please Login
-          </a>
+          {userLogged ? (
+            <NavLink
+              to="/paymentForm"
+              className="btn btn-primary btn-block mt-8">
+              Buy
+            </NavLink>
+          ) : (
+            <NavLink to="/register" className="btn btn-primary btn-block mt-8">
+              Please Login
+            </NavLink>
+          )}
         </div>
       </div>
     </div>

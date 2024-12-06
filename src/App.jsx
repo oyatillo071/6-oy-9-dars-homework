@@ -6,6 +6,9 @@ import { Link, NavLink, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import Products from "./pages/Products";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import PaymentForm from "./pages/PaymentForm";
 import ErrorPage from "./pages/ErrorPage";
 import MainLayout from "./layouts/MainLayout";
 import About from "./pages/About";
@@ -72,6 +75,9 @@ function App() {
             </MainLayout>
           }
         />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/paymentForm" element={<PaymentForm />} />
       </Routes>
     </>
   );
