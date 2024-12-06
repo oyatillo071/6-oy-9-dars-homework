@@ -21,6 +21,7 @@ function Home() {
         console.log(response);
         if (response.status == 200) {
           setProducts(response.data.data);
+          setLoading(false);
         }
       })
       .catch((error) => {
@@ -31,7 +32,13 @@ function Home() {
   function handleRedirect(id) {
     navigate(`/products/${id}`);
   }
-
+  if (loading) {
+    return (
+      <div className="grid place-items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex h-full  container mx-auto  gap-7 justify-between">

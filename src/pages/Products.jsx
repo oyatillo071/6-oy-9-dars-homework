@@ -37,8 +37,8 @@ function Products() {
         if (response.status === 200) {
           setProducts(response.data.data);
           console.log(response.data);
+          setLoading(false);
         }
-        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -49,11 +49,20 @@ function Products() {
   const formatPrice = (price) => `$${(price / 100).toFixed(2)}`;
 
   if (loading) {
-    return <div className="text-center py-10">Loading...</div>;
+    return (
+      <div className="grid place-items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
   if (!loading && products.length === 0) {
-    return <div className="text-center py-10">No products found.</div>;
+    return (
+      <div className="grid place-items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+        <div className="text-center py-10">No products found.</div>
+      </div>
+    );
   }
 
   return (
@@ -195,6 +204,7 @@ function Products() {
           <button
             onClick={(e) => {
               e.preventDefault();
+              setLoading(true);
               setSearch((prev) => prev + 1);
             }}
             type="submit"

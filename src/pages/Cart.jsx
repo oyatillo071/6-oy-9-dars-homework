@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 
 function Cart() {
   const [copied, setCopied] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [totals, setTotals] = useState({
     subtotal: 0,
     shipping: 5.0,
@@ -15,6 +16,8 @@ function Cart() {
       ? JSON.parse(localStorage.getItem("productsData"))
       : [];
     setCopied(productsData);
+    setLoading(false);
+
     userLogged = localStorage.getItem("userLogged");
   }, []);
   const formatPrice = (price) => {
@@ -41,6 +44,13 @@ function Cart() {
 
   if (copied.length === 0) {
     return <div>No items in the cart</div>;
+  }
+  if (loading) {
+    return (
+      <div className="grid place-items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
   return (

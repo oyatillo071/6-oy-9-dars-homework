@@ -54,7 +54,11 @@ function Product() {
     );
   };
   if (!product || !product.attributes) {
-    return <span className="loading loading-spinner loading-lg"></span>;
+    return (
+      <div className="grid place-items-center min-h-[100%]">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
 
   return (
