@@ -7,6 +7,8 @@ function Products() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageCount, setPageCount] = useState(1);
 
   const [formData, setFormData] = useState({
     search: "",
@@ -36,6 +38,8 @@ function Products() {
       .then((response) => {
         if (response.status === 200) {
           setProducts(response.data.data);
+          setTotalCount(response.data.meta.pagination.total);
+          setPageCount(response.data.meta.pagination.pageCount);
           console.log(response.data);
           setLoading(false);
         }
@@ -228,7 +232,9 @@ function Products() {
           </button>
         </div>
       </form>
-
+      <div className="container mx-auto p-2 my-5 border-b-2">
+        <h3>{totalCount} products</h3>
+      </div>
       <div className="w-full flex flex-wrap items-center justify-between gap-5 mt-5">
         {products.map((product) => {
           const price = product.attributes.price.toString();
@@ -240,7 +246,7 @@ function Products() {
           return (
             <div
               key={product.id}
-              className="flex w-[25%] h-[350px] p-2 rounded-xl flex-col shadow-md items-center gap-2"
+              className="flex w-[350px] h-[350px] p-2 rounded-xl flex-col shadow-xl hover:shadow-2xl  items-center gap-2"
               onClick={() => navigate(`/products/${product.id}`)}>
               <img
                 src={product.attributes.image}
@@ -289,7 +295,7 @@ function Products() {
           </span>
         </div>
         <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, 3))}
+          onClick={() => setPage((prev) => Math.min(prev + 1, pageCount))}
           className="btn btn-sm btn-outline">
           Next
         </button>
