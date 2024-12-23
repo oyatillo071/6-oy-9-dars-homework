@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
 function PaymentForm() {
+  const notify = (text) => toast(`${text}`);
   const [formData, setFormData] = useState({
     cardNumber: "",
     cardHolder: "",
@@ -66,6 +67,7 @@ function PaymentForm() {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.values(validationErrors).every((value) => value.length === 0)) {
+      notify("Thanks for choice us");
       setSuccess(true);
       localStorage.setItem("productsData", []);
     } else {
@@ -75,8 +77,21 @@ function PaymentForm() {
 
   return (
     <div className="container mx-auto p-8">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
       {success ? (
-        <div className="card bg-base-100 shadow-lg p-8 text-center">
+        <div className="card bg-base-100 shadow-lg p-8 h-full flex flex-col justify-center text-center">
           <h4 className="text-2xl font-bold text-green-500">
             To'lov muvaffaqiyatli bajarildi!
           </h4>
@@ -87,7 +102,8 @@ function PaymentForm() {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="card w-96 mx-auto bg-base-100 shadow-lg p-8 flex flex-col gap-y-4">
+          className="card w-96 mx-auto bg-base-100 shadow-lg p-8 flex flex-col gap-y-4"
+        >
           <h4 className="text-2xl font-bold text-center">To'lov formasi</h4>
 
           <div className="form-control">

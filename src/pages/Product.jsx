@@ -1,13 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NavLink, Link, useParams } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { increment } from "../store/counterSlice";
+import { ToastContainer, toast } from "react-toastify";
 function Product() {
+  const notify = (text) => toast(`${text}`);
   const [product, setProduct] = useState([]);
   const { id } = useParams();
   const [choiseColor, setChoiseColor] = useState(null);
   const [choiseCount, setChoiseCount] = useState(1);
-  const [productId, setProductId] = useState(0);
+
+  const counter = useSelector((state) => {
+    return state;
+  });
+  console.log(counter);
+
+  const dispatch = useDispatch();
 
   function localSave(data, choiseColor, choiseCount) {
     let copied = localStorage.getItem("productsData")
@@ -26,10 +35,9 @@ function Product() {
       choiseColor,
       choiseCount,
     });
-
+    notify("Product succesfully added to cart");
     localStorage.setItem("productsData", JSON.stringify(copied));
-
-    console.log(JSON.parse(localStorage.getItem("productsData")));
+    dispatch(increment(1));
   }
 
   useEffect(() => {
@@ -63,19 +71,34 @@ function Product() {
 
   return (
     <section className="my-12 h-full pb-20 container mx-auto">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
       <div className="text-md breadcrumbs">
         <ul>
           <li>
             <NavLink
               to="/home"
-              className="font-sans text-sm   hover:bg-gray-200 ">
+              className="font-sans text-sm   hover:bg-gray-200 "
+            >
               Home
             </NavLink>
           </li>
           <li>
             <Link
               to="/products"
-              className="font-sans text-sm   hover:bg-gray-200 bg-white">
+              className="font-sans text-sm   hover:bg-gray-200 bg-white"
+            >
               Products
             </Link>
           </li>
@@ -109,7 +132,8 @@ function Product() {
               className="flex items-center gap-4"
               onSubmit={(e) => {
                 e.preventDefault();
-              }}>
+              }}
+            >
               {product.attributes.colors.map((value, index) => {
                 const isSelected = choiseColor === value;
                 return (
@@ -119,12 +143,14 @@ function Product() {
                     }}
                     key={index}
                     htmlFor={`color-${index}`}
-                    className="flex items-center">
+                    className="flex items-center"
+                  >
                     <div
                       className={`rounded-[50%] w-7 h-7 cursor-pointer border-2 ${
                         isSelected ? "border-black" : "border-gray-300"
                       }`}
-                      style={{ backgroundColor: value }}></div>
+                      style={{ backgroundColor: value }}
+                    ></div>
                     <input
                       type="radio"
                       id={`color-${index}`}
@@ -149,7 +175,8 @@ function Product() {
                 setChoiseCount(e.target.value);
               }}
               className="select select-secondary select-bordered select-md bg-white border-black outline-none focus:border-black focus:outline-none"
-              id="amount">
+              id="amount"
+            >
               {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
                 <option key={num} value={num}>
                   {num}
@@ -168,12 +195,10 @@ function Product() {
                   return;
                 }
 
-                // alert(choiseColor);
-                // alert(choiseCount);
-                // alert(productId);
                 localSave(product, choiseColor, choiseCount);
               }}
-              className="btn bg-[#463aa1] border-none text-[#dbd4ed] btn-md hover:bg-blue-600 ">
+              className="btn bg-[#463aa1] border-none text-[#dbd4ed] btn-md hover:bg-blue-600 "
+            >
               Add to bag
             </button>
           </div>

@@ -53,7 +53,8 @@ function Home() {
           </p>
           <Link
             to="./products"
-            className="bg-blue-600 px-4 py-3 text-[#dbe1ff]  rounded-md">
+            className="bg-blue-600 px-4 py-3 text-[#dbe1ff]  rounded-md"
+          >
             OUR PRODUCTS
           </Link>
         </div>
@@ -92,10 +93,11 @@ function Home() {
               return (
                 <div
                   key={index}
-                  className="flex w-[30%] h-[350px] p-2 rounded-xl flex-col shadow-md items-center gap-2"
+                  className="flex w-[30%] h-[350px] p-2 rounded-xl flex-col shadow-2xl items-center gap-2"
                   onClick={() => {
                     handleRedirect(product.id);
-                  }}>
+                  }}
+                >
                   <img
                     src={product.attributes.image}
                     className="w-full h-[250px] rounded-lg object-cover"

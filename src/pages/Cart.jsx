@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-
+import { decrement, increment, updateCount } from "../store/counterSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
 function Cart() {
+  const notify = (text) => toast(`${text}`);
+  const dispatch = useDispatch();
   const [copied, setCopied] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totals, setTotals] = useState({
@@ -16,6 +20,7 @@ function Cart() {
       ? JSON.parse(localStorage.getItem("productsData"))
       : [];
     setCopied(productsData);
+    dispatch(updateCount(productsData.length));
     setLoading(false);
 
     userLogged = localStorage.getItem("userLogged");
@@ -55,6 +60,19 @@ function Cart() {
 
   return (
     <div className="container mx-auto">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
       <div className="border-b border-base-300 mb-7 pb-5">
         <h2 className="text-3xl font-medium tracking-wider capitalize">
           Shopping Cart
@@ -65,7 +83,8 @@ function Cart() {
           {copied.map((value, index) => (
             <article
               key={index}
-              className="mb-12 flex flex-col gap-y-4 sm:flex-row flex-wrap border-b border-base-300 pb-6 last:border-b-0">
+              className="mb-12 flex flex-col gap-y-4 sm:flex-row flex-wrap border-b border-base-300 pb-6 last:border-b-0"
+            >
               <img
                 src={value.data.image}
                 alt={value.data.title}
@@ -82,7 +101,8 @@ function Cart() {
                     className="badge badge-sm"
                     style={{
                       backgroundColor: value.choiseColor,
-                    }}></span>
+                    }}
+                  ></span>
                 </p>
               </div>
               <div className="sm:ml-12">
@@ -102,7 +122,8 @@ function Cart() {
                         JSON.stringify(updatedCart)
                       );
                     }}
-                    className="mt-2 select select-base select-bordered select-xs">
+                    className="mt-2 select select-base select-bordered select-xs"
+                  >
                     {Array.from({ length: 20 }, (value, i) => i + 1).map(
                       (num) => (
                         <option key={num} value={num}>
@@ -122,8 +143,11 @@ function Cart() {
                       "productsData",
                       JSON.stringify(updatedCart)
                     );
+                    notify("Product deleted at cart");
+                    dispatch(decrement(1));
                   }}
-                  className="mt-2 link link-primary link-hover text-sm">
+                  className="mt-2 link link-primary link-hover text-sm"
+                >
                   Remove
                 </button>
               </div>
@@ -158,7 +182,8 @@ function Cart() {
           {userLogged ? (
             <NavLink
               to="/paymentForm"
-              className="btn btn-primary btn-block mt-8">
+              className="btn btn-primary btn-block mt-8"
+            >
               Buy
             </NavLink>
           ) : (

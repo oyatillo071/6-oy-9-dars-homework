@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.0.2"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.0.2",
+    "react-toastify": "^11.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
@@ -31,5 +34,4 @@
     "tailwindcss": "^3.4.16",
     "vite": "^5.4.10"
   }
-  
 }

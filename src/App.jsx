@@ -13,20 +13,12 @@ import ErrorPage from "./pages/ErrorPage";
 import MainLayout from "./layouts/MainLayout";
 import About from "./pages/About";
 import Cart from "./pages/Cart";
-import axios from "axios";
+import AuthLayout from "./layouts/AuthLayout";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route
-          index
-          element={
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          }
-        />
         <Route
           path="/home"
           element={
@@ -75,9 +67,41 @@ function App() {
             </MainLayout>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/paymentForm" element={<PaymentForm />} />
+        <Route
+          path="/login"
+          element={
+            <AuthLayout>
+              {" "}
+              <Login />
+            </AuthLayout>
+          }
+        />
+
+        <Route
+          index
+          element={
+            <AuthLayout>
+              <Register />
+            </AuthLayout>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <AuthLayout>
+              <Register />
+            </AuthLayout>
+          }
+        />
+        <Route
+          path="/paymentForm"
+          element={
+            <MainLayout>
+              <PaymentForm />
+            </MainLayout>
+          }
+        />
       </Routes>
     </>
   );

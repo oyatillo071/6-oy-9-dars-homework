@@ -70,7 +70,7 @@ function Products() {
   }
 
   return (
-    <div className="container px-10 mx-auto">
+    <div className="container px-5 mx-auto">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -78,7 +78,8 @@ function Products() {
         onChange={(e) => {
           e.preventDefault();
         }}
-        className="bg-[#f0f6ff] rounded-md px-8 py-4 grid gap-x-4 mb-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center">
+        className="bg-[#f0f6ff] rounded-md px-8 py-4 grid gap-x-4 mb-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center"
+      >
         <div className="form-control flex flex-col items-start">
           <label htmlFor="search" className="label text-nowrap">
             <span className="label-text capitalize">Search Product</span>
@@ -108,7 +109,8 @@ function Products() {
             onChange={(e) => {
               handleInputChange(e);
               e.preventDefault();
-            }}>
+            }}
+          >
             <option value="all">all</option>
             <option value="Tables">Tables</option>
             <option value="Chairs">Chairs</option>
@@ -130,7 +132,8 @@ function Products() {
             onChange={(e) => {
               handleInputChange(e);
               e.preventDefault();
-            }}>
+            }}
+          >
             <option value="all">all</option>
             <option value="Modenza">Modenza</option>
             <option value="Luxora">Luxora</option>
@@ -152,7 +155,8 @@ function Products() {
             onChange={(e) => {
               handleInputChange(e);
               e.preventDefault();
-            }}>
+            }}
+          >
             <option value="a-z">a-z</option>
             <option value="z-a">z-a</option>
             <option value="high">High</option>
@@ -188,7 +192,8 @@ function Products() {
         <div className="form-control">
           <label
             htmlFor="shipping"
-            className="label cursor-pointer text-nowrap">
+            className="label cursor-pointer text-nowrap"
+          >
             <span className="label-text capitalize">Free Shipping</span>
           </label>
           <input
@@ -212,7 +217,8 @@ function Products() {
               setSearch((prev) => prev + 1);
             }}
             type="submit"
-            className="btn btn-primary btn-sm px-20">
+            className="btn btn-primary btn-sm px-20"
+          >
             Search
           </button>
           <button
@@ -227,7 +233,8 @@ function Products() {
                 shipping: false,
               })
             }
-            className="btn btn-accent btn-sm px-20">
+            className="btn btn-accent btn-sm px-20"
+          >
             Reset
           </button>
         </div>
@@ -235,7 +242,7 @@ function Products() {
       <div className="container mx-auto p-2 my-5 border-b-2">
         <h3>{totalCount} products</h3>
       </div>
-      <div className="w-full flex flex-wrap items-center justify-between gap-5 mt-5">
+      <div className="w-full flex flex-wrap items-center justify-start gap-5 mt-5">
         {products.map((product) => {
           const price = product.attributes.price.toString();
           const formattedPrice =
@@ -247,7 +254,8 @@ function Products() {
             <div
               key={product.id}
               className="flex w-[350px] h-[350px] p-2 rounded-xl flex-col shadow-xl hover:shadow-2xl  items-center gap-2"
-              onClick={() => navigate(`/products/${product.id}`)}>
+              onClick={() => navigate(`/products/${product.id}`)}
+            >
               <img
                 src={product.attributes.image}
                 className="w-full h-[250px] rounded-lg object-cover"
@@ -262,41 +270,46 @@ function Products() {
         })}
       </div>
 
-      <div className="flex justify-center items-center gap-4  mt-8 mb-12">
+      <div className="flex justify-around w-72 items-center gap-1 border rounded-lg mt-8 mb-12">
         <button
+          className="hover:underline underline-offset-4"
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          className="btn btn-sm btn-outline">
+        >
           Previous
         </button>
-        <div className="flex items-center border bg-slate-500 overflow-hidden rounded-lg">
+        <div className="flex items-center  overflow-hidden ">
           <span
-            className="hover:bg-gray-700 cursor-pointer   py-1 px-3 "
+            className="hover:underline underline-offset-4 border-x hover:scale-125 cursor-pointer   py-1 px-3 "
             onClick={(e) => {
               e.preventDefault();
               setPage(1);
-            }}>
+            }}
+          >
             1
           </span>
           <span
-            className="hover:bg-gray-700 cursor-pointer   py-1 px-3 "
+            className="hover:underline underline-offset-4 border-r hover:scale-125 cursor-pointer   py-1 px-3 "
             onClick={(e) => {
               e.preventDefault();
               setPage(2);
-            }}>
+            }}
+          >
             2
           </span>
           <span
-            className="hover:bg-gray-700 cursor-pointer   py-1 px-3 "
+            className="hover:underline underline-offset-4 border-r hover:scale-125 cursor-pointer   py-1 px-3 "
             onClick={(e) => {
               e.preventDefault();
               setPage(3);
-            }}>
+            }}
+          >
             3
           </span>
         </div>
         <button
+          className="hover:underline underline-offset-4"
           onClick={() => setPage((prev) => Math.min(prev + 1, pageCount))}
-          className="btn btn-sm btn-outline">
+        >
           Next
         </button>
       </div>

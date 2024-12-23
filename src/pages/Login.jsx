@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 function Login() {
+  const notify = (text) => toast(text);
+
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
@@ -17,32 +21,51 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    if (
-      storedUser &&
-      storedUser.email === formData.identifier &&
-      storedUser.password === formData.password
-    ) {
-      alert("Login successful!");
-      navigate("/products");
-    } else {
-      alert("Invalid credentials or no account found. Please register.");
-      navigate("/register");
-    }
+    axios
+      .post("https://auth-rg69.onrender.com/api/auth/signin", {
+        username: formData.identifier,
+        password: formData.password,
+      })
+      .then((response) => {
+        if (response.data && response.data.success) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem("userLogged", true);
+          notify("Login successful!");
+          navigate("/products");
+        } else {
+          notify("Invalid credentials or no account found.");
+          navigate("/register");
+        }
+      })
+      .catch((error) => {
+        console.error("Login error:", error.response?.data || error.message);
+        notify("Login failed. Please try again.");
+      });
   };
-  localStorage.setItem("userLogged", false);
 
   const handleGuestLogin = () => {
     localStorage.setItem("userLogged", true);
-    alert("Logged in as guest!");
+    notify("Logged in as guest!");
     navigate("/products");
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="card w-96 p-8 bg-base-100 container mx-auto shadow-lg flex flex-col gap-y-4">
+      className="card w-96 p-8 bg-base-100 container mx-auto shadow-lg flex flex-col gap-y-4"
+    >
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <h4 className="text-center text-3xl font-bold">Login</h4>
 
       <div className="form-control">
@@ -50,7 +73,7 @@ function Login() {
           <span className="label-text capitalize">email</span>
         </label>
         <input
-          type="email"
+          type="text"
           name="identifier"
           id="identifier"
           className="input input-bordered"
@@ -82,7 +105,8 @@ function Login() {
       <button
         type="button"
         className="btn btn-secondary btn-block"
-        onClick={handleGuestLogin}>
+        onClick={handleGuestLogin}
+      >
         Guest User
       </button>
 
@@ -90,7 +114,8 @@ function Login() {
         Not a member yet?
         <NavLink
           to="/register"
-          className="ml-2 link link-hover link-primary capitalize">
+          className="ml-2 link link-hover link-primary capitalize"
+        >
           Register
         </NavLink>
       </p>
