@@ -88,7 +88,6 @@ function PaymentForm() {
         draggable
         pauseOnHover
         theme="light"
-        transition={Bounce}
       />
       {success ? (
         <div className="card bg-base-100 shadow-lg p-8 h-full flex flex-col justify-center text-center">

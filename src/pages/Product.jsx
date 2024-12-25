@@ -82,7 +82,6 @@ function Product() {
         draggable
         pauseOnHover
         theme="light"
-        transition={Bounce}
       />
       <div className="text-md breadcrumbs">
         <ul>
@@ -189,7 +188,7 @@ function Product() {
             <button
               onClick={(e) => {
                 if (!choiseColor || !choiseCount) {
-                  alert(
+                  notify(
                     "Please select a color and amount before adding to bag."
                   );
                   return;

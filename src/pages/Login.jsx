@@ -27,9 +27,10 @@ function Login() {
         password: formData.password,
       })
       .then((response) => {
-        if (response.data && response.data.success) {
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          localStorage.setItem("userLogged", true);
+        if (response.data) {
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("user", JSON.stringify(response.data));
+          localStorage.setItem("accessToken", response.data.accessToken);
           notify("Login successful!");
           navigate("/products");
         } else {
@@ -44,7 +45,7 @@ function Login() {
   };
 
   const handleGuestLogin = () => {
-    localStorage.setItem("userLogged", true);
+    localStorage.setItem("isLoggedIn", "true");
     notify("Logged in as guest!");
     navigate("/products");
   };
@@ -70,7 +71,7 @@ function Login() {
 
       <div className="form-control">
         <label htmlFor="identifier" className="label">
-          <span className="label-text capitalize">email</span>
+          <span className="label-text capitalize">Username</span>
         </label>
         <input
           type="text"
@@ -84,7 +85,7 @@ function Login() {
 
       <div className="form-control">
         <label htmlFor="password" className="label">
-          <span className="label-text capitalize">password</span>
+          <span className="label-text capitalize">Password</span>
         </label>
         <input
           type="password"

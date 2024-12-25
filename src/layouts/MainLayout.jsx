@@ -4,19 +4,19 @@ import { useNavigate } from "react-router-dom";
 
 function MainLayout({ children }) {
   const navigate = useNavigate();
-  const [isLog, setIslog] = useState(false);
+  const [isLog, setIsLog] = useState(false);
 
   useEffect(() => {
-    const userLogged = localStorage.getItem("isLoggedIn"); // Correct the key name here
-    setIslog(!!userLogged);
-    if (!isLog) {
+    const userLogged = localStorage.getItem("isLoggedIn") === "true";
+    setIsLog(userLogged);
+    if (!userLogged) {
       navigate("/register");
     }
-  }, [isLog, navigate]);
+  }, [navigate]);
 
   return (
     <div className="bg-white max-h-full px-6 h-full">
-      <Header></Header>
+      <Header />
       {children}
     </div>
   );
