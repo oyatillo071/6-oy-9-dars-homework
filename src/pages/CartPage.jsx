@@ -1,41 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { decrement, increment, updateCount } from "../store/counterSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-function Cart() {
+import { useDispatch, useSelector } from "react-redux";
+import { add, clear, remove } from "../store/CartSlice";
+
+function CartPage() {
   const notify = (text) => toast(`${text}`);
   const dispatch = useDispatch();
-  const [copied, setCopied] = useState([]);
+  // const [copied, setCopied] = useState([]);
   const [loading, setLoading] = useState(false);
+  const cartItems = useSelector((state) => state.cart);
+
   const [totals, setTotals] = useState({
     subtotal: 0,
     shipping: 5.0,
     tax: 0,
     total: 0,
   });
-  let userLogged = localStorage.getItem("userLogged");
-  useEffect(() => {
-    const productsData = localStorage.getItem("productsData")
-      ? JSON.parse(localStorage.getItem("productsData"))
-      : [];
-    setCopied(productsData);
-    dispatch(updateCount(productsData.length));
-    setLoading(false);
 
-    userLogged = localStorage.getItem("userLogged");
-  }, []);
-  const formatPrice = (price) => {
-    const priceStr = price.toString();
-    return parseFloat(
-      priceStr.slice(0, priceStr.length - 2) +
-        "." +
-        priceStr.slice(priceStr.length - 2)
-    );
-  };
+  // useEffect(() => {
+  //   // const productsData = localStorage.getItem("productsData")
+  //   //   ? JSON.parse(localStorage.getItem("productsData"))
+  //   //   : [];
+  //   // setCopied(productsData);
+  //   // dispatch(clear());
+  //   productsData.forEach((item) => {
+  //     dispatch(add(item));
+  //   });
+  //   setLoading(false);
+  // });
+
   useEffect(() => {
-    let subtotal = copied.reduce(
-      (sum, item) => sum + item.data.price * item.choiseCount,
+    let subtotal = cartItems.reduce(
+      (sum, item) => sum + item.attributes.price * item.choiseCount,
       0
     );
     subtotal = formatPrice(subtotal);
@@ -45,9 +42,29 @@ function Cart() {
     tax = tax.toFixed(2);
     shipping = shipping.toFixed(2);
     setTotals({ subtotal, shipping, tax, total });
-  }, [copied]);
+  }, [cartItems]);
+  console.log(cartItems);
 
-  if (copied.length === 0) {
+  const formatPrice = (price) => {
+    const priceStr = price.toString();
+    return parseFloat(
+      priceStr.slice(0, priceStr.length - 2) +
+        "." +
+        priceStr.slice(priceStr.length - 2)
+    );
+  };
+  useEffect(() => {
+    console.log(cartItems);
+  });
+  const handleRemoveItem = (index) => {
+    // const updatedCart = cartItems.filter((value, i) => i !== index);
+    // setCopied(updatedCart);
+    // localStorage.setItem("productsData", JSON.stringify(updatedCart));
+    dispatch(remove(index));
+    notify("Product deleted from cart");
+  };
+
+  if (cartItems.length === 0) {
     return <div>No items in the cart</div>;
   }
   if (loading) {
@@ -79,20 +96,22 @@ function Cart() {
       </div>
       <div className="lg:grid lg:grid-cols-12 gap-6 px-11">
         <div className="lg:col-span-8">
-          {copied.map((value, index) => (
+          {cartItems.map((value, index) => (
             <article
               key={index}
               className="mb-12 flex flex-col gap-y-4 sm:flex-row flex-wrap border-b border-base-300 pb-6 last:border-b-0"
             >
               <img
-                src={value.data.image}
-                alt={value.data.title}
+                src={value.attributes.image}
+                alt={value.attributes.title}
                 className="h-24 w-24 rounded-lg sm:h-32 sm:w-32 object-cover"
               />
               <div className="sm:ml-16 sm:w-48">
-                <h3 className="capitalize font-medium">{value.data.title}</h3>
+                <h3 className="capitalize font-medium">
+                  {value.attributes.title}
+                </h3>
                 <h4 className="mt-2 capitalize text-sm text-neutral-content">
-                  {value.data.company}
+                  {value.attributes.company}
                 </h4>
                 <p className="mt-4 text-sm capitalize flex items-center gap-x-2">
                   Color:
@@ -113,13 +132,13 @@ function Cart() {
                     id={`amount-${index}`}
                     value={value.choiseCount}
                     onChange={(e) => {
-                      const updatedCart = [...copied];
+                      const updatedCart = [...cartItems];
                       updatedCart[index].choiseCount = Number(e.target.value);
-                      setCopied(updatedCart);
-                      localStorage.setItem(
-                        "productsData",
-                        JSON.stringify(updatedCart)
-                      );
+                      // setCopied(updatedCart);
+                      // localStorage.setItem(
+                      //   "productsData",
+                      //   JSON.stringify(updatedCart)
+                      // );
                     }}
                     className="mt-2 select select-base select-bordered select-xs"
                   >
@@ -133,25 +152,14 @@ function Cart() {
                   </select>
                 </div>
                 <button
-                  onClick={() => {
-                    const updatedCart = copied.filter(
-                      (value, i) => i !== index
-                    );
-                    setCopied(updatedCart);
-                    localStorage.setItem(
-                      "productsData",
-                      JSON.stringify(updatedCart)
-                    );
-                    notify("Product deleted at cart");
-                    dispatch(decrement(1));
-                  }}
+                  onClick={() => handleRemoveItem(index)}
                   className="mt-2 link link-primary link-hover text-sm"
                 >
                   Remove
                 </button>
               </div>
               <p className="font-medium sm:ml-auto">
-                ${formatPrice(value.data.price * value.choiseCount)}
+                ${formatPrice(value.attributes.price * value.choiseCount)}
               </p>
             </article>
           ))}
@@ -178,22 +186,13 @@ function Cart() {
               </p>
             </div>
           </div>
-          {userLogged ? (
-            <NavLink
-              to="/paymentForm"
-              className="btn btn-primary btn-block mt-8"
-            >
-              Buy
-            </NavLink>
-          ) : (
-            <NavLink to="/register" className="btn btn-primary btn-block mt-8">
-              Please Login
-            </NavLink>
-          )}
+          <NavLink to="/paymentForm" className="btn btn-primary btn-block mt-8">
+            Buy
+          </NavLink>
         </div>
       </div>
     </div>
   );
 }
 
-export default Cart;
+export default CartPage;

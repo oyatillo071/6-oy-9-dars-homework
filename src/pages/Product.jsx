@@ -4,6 +4,8 @@ import { NavLink, Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from "../store/counterSlice";
 import { ToastContainer, toast } from "react-toastify";
+import { add, remove, update } from "../store/CartSlice";
+
 function Product() {
   const notify = (text) => toast(`${text}`);
   const [product, setProduct] = useState([]);
@@ -19,24 +21,25 @@ function Product() {
   const dispatch = useDispatch();
 
   function localSave(data, choiseColor, choiseCount) {
-    let copied = localStorage.getItem("productsData")
-      ? JSON.parse(localStorage.getItem("productsData"))
-      : [];
+    // let copied = localStorage.getItem("productsData")
+    //   ? JSON.parse(localStorage.getItem("productsData"))
+    //   : [];
 
-    copied.push({
-      data: {
-        id: data.id,
-        title: data.attributes.title,
-        price: data.attributes.price,
-        company: data.attributes.company,
-        image: data.attributes.image,
-        shipping: data.attributes.shipping,
-      },
-      choiseColor,
-      choiseCount,
-    });
+    // copied.push({
+    //   data: {
+    //     id: data.id,
+    //     title: data.attributes.title,
+    //     price: data.attributes.price,
+    //     company: data.attributes.company,
+    //     image: data.attributes.image,
+    //     shipping: data.attributes.shipping,
+    //   },
+    //   choiseColor,
+    //   choiseCount,
+    // });
+    dispatch(add({ ...data, choiseColor, choiseCount }));
     notify("Product succesfully added to cart");
-    localStorage.setItem("productsData", JSON.stringify(copied));
+    // localStorage.setItem("productsData", JSON.stringify(copied));
     dispatch(increment(1));
   }
 

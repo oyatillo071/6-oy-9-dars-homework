@@ -12,7 +12,7 @@ import PaymentForm from "./pages/PaymentForm";
 import ErrorPage from "./pages/ErrorPage";
 import MainLayout from "./layouts/MainLayout";
 import About from "./pages/About";
-import Cart from "./pages/Cart";
+import Cart from "./pages/CartPage";
 import AuthLayout from "./layouts/AuthLayout";
 
 function App() {
