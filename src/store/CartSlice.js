@@ -7,18 +7,28 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     add: (state, action) => {
-      let exist = state.find((value) => value.id === action.payload.data.id);
+      let exist = state.find((value) => value.id === action.payload.id);
 
       if (exist) {
-        exist.count += action.count;
+        exist.choiseCount += +action.payload.choiseCount;
       } else {
         state.push(action.payload);
       }
     },
     remove: (state, action) => {
-      return state.filter((item) => item.data.id !== action.payload.id);
+      state.filter((value) => value.id != action.payload.id);
     },
+
     update: (state, action) => {
+      state.map((value) => {
+        if (
+          value.id == action.payload.id &&
+          action.payload.color == value.color
+        ) {
+          value.count += action.payload.count;
+        }
+        return value;
+      });
       const updatedItem = action.payload;
       const index = state.findIndex(
         (item) => item.data.id === updatedItem.data.id
@@ -28,7 +38,9 @@ const cartSlice = createSlice({
       }
     },
 
-    clear: () => {},
+    clear: (state, action) => {
+      state = [];
+    },
   },
 });
 

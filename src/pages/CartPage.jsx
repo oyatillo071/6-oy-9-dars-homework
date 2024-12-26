@@ -27,7 +27,6 @@ function CartPage() {
   //   productsData.forEach((item) => {
   //     dispatch(add(item));
   //   });
-  //   setLoading(false);
   // });
 
   useEffect(() => {
@@ -42,6 +41,7 @@ function CartPage() {
     tax = tax.toFixed(2);
     shipping = shipping.toFixed(2);
     setTotals({ subtotal, shipping, tax, total });
+    setLoading(false);
   }, [cartItems]);
   console.log(cartItems);
 
@@ -152,7 +152,7 @@ function CartPage() {
                   </select>
                 </div>
                 <button
-                  onClick={() => handleRemoveItem(index)}
+                  onClick={() => handleRemoveItem(value.id)}
                   className="mt-2 link link-primary link-hover text-sm"
                 >
                   Remove
